@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Monedas</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Conversor de Monedas</h1>
+        
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form action="/convert" method="post" class="converter-form">
+            <div class="form-group">
+                <label for="amount">Cantidad:</label>
+                <input type="number" id="amount" name="amount" step="0.01" required 
+                       value="{{ amount if amount else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="from_currency">De:</label>
+                <select id="from_currency" name="from_currency" required>
+                    <option value="USD" {% if from_currency == 'USD' %}selected{% endif %}>USD - Dólar Americano</option>
+                    <option value="EUR" {% if from_currency == 'EUR' %}selected{% endif %}>EUR - Euro</option>
+                    <option value="GBP" {% if from_currency == 'GBP' %}selected{% endif %}>GBP - Libra Esterlina</option>
+                    <option value="JPY" {% if from_currency == 'JPY' %}selected{% endif %}>JPY - Yen Japonés</option>
+                    <option value="MXN" {% if from_currency == 'MXN' %}selected{% endif %}>MXN - Peso Mexicano</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="to_currency">A:</label>
+                <select id="to_currency" name="to_currency" required>
+                    <option value="USD" {% if to_currency == 'USD' %}selected{% endif %}>USD - Dólar Americano</option>
+                    <option value="EUR" {% if to_currency == 'EUR' %}selected{% endif %}>EUR - Euro</option>
+                    <option value="GBP" {% if to_currency == 'GBP' %}selected{% endif %}>GBP - Libra Esterlina</option>
+                    <option value="JPY" {% if to_currency == 'JPY' %}selected{% endif %}>JPY - Yen Japonés</option>
+                    <option value="MXN" {% if to_currency == 'MXN' %}selected{% endif %}>MXN - Peso Mexicano</option>
+                </select>
+            </div>
+
+            <button type="submit" class="convert-button">Convertir</button>
+        </form>
+
+        {% if result is defined %}
+        <div class="result-container">
+            <h2>Resultado:</h2>
+            <p class="result">
+                {{ amount }} {{ from_currency }} = {{ "%.2f"|format(result) }} {{ to_currency }}
+            </p>
+            <p class="rate">
+                Tasa de cambio: 1 {{ from_currency }} = {{ "%.4f"|format(rate) }} {{ to_currency }}
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html> 
